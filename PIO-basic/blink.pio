@@ -1,0 +1,31 @@
+.program blink
+
+;This is a comment.
+
+;at 2khz [2000Hz/200 = 10Hz] [200 / 2000 = 0.1 sec]
+.wrap_target
+    ; turn ON LED for 100 cycles
+    set pins, 1 [19] ; turn ON LED and wait 19 cycles [total 20 cycles]
+    nop [19]; wait 20 cycles
+    nop [19]; wait 20 cycles
+    nop [19]; wait 20 cycles
+    nop [19]; wait 20 cycles
+
+    ; turn OFF LED for 100 cycles
+    set pins, 0 [19] ; turn OFF LED and wait 19 cycles [total 20 cycles]
+    nop [19]; wait 20 cycles
+    nop [19]; wait 20 cycles
+    nop [19]; wait 20 cycles
+    nop [19]; wait 20 cycles
+.wrap
+
+% c-sdk {
+   void blink_program_init(PIO pio, uint sm, uint offset, uint pin, float div){
+       pio_sm_config c = blink_program_get_default_config(offset);
+       pio_gpio_init(pio, pin);
+       sm_config_set_set_pins(&c, pin, 1);
+       pio_sm_set_consecutive_pindirs(pio, sm, pin, 1, true);//true -output false-input
+       sm_config_set_clkdiv(&c, div);
+       pio_sm_init(pio, sm, offset, &c);
+   }
+%}
