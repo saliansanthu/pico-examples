@@ -4,6 +4,8 @@
 #include "hardware/adc.h"
 #include "hardware/irq.h"
 
+//hello
+
 void core1_interrupt_handler(){
     while(multicore_fifo_rvalid()){
         uint16_t raw = multicore_fifo_pop_blocking();
